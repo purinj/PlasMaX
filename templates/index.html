@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col s12 m4 l2 white"></div>
+        <div class="col s12 m l8">
+            <div class="card-panel deep-orange darken-1 lighten-2 ">
+                <h1 class="center-align white-text ">PlasmaX </h1>
+            </div>
+            <div class="card-panel white darken-1 lighten-2 center">
+                <div class="section"></div>
+                <input id="image1" type="file" accept="image/*"  capture="environment" onchange="encodeImageFileAsURL(this)"></input>
+                <h5 class="center deep-grey-text">📷 Please Choose or Take new photo of a Plasma Bag 📷</h5>
+                <div class="section"></div>
+
+                <div class="divider"></div>
+
+                <div class="section"></div>
+                <div class="section white center"><img id='preview' src="img1" alt="No Photo"  width=320 height=240></div>
+                <div class="section white center"><button class="btn waves-effect waves-light" onClick="postData()">Submit ✔️</button></div>
+                <div class="section"></div>
+
+                <div class="divider"></div>
+
+               
+                <div class="section white center"><h4>💡 Result: </h4></div>
+                <div class="section white center"><h4 id="result">...</h4></div>
+                
+
+            </div>
+            
+        </div>
+        
+    <div class="col s12 m4 l2 white"></div>
+    <!-- <video id="player" controls autoplay></video>
+    <button id="capture">Capture</button>
+    <canvas id="canvas" width=1024 height=720></canvas> -->
+    
+</div>
+<!-- <script>
+  const player = document.getElementById('player');
+  const canvas = document.getElementById('canvas');
+  const context = canvas.getContext('2d');
+  const captureButton = document.getElementById('capture');
+
+  const constraints = {
+    video: true,
+  };
+
+  captureButton.addEventListener('click', () => {
+    // Draw the video frame to the canvas.
+    context.drawImage(player, 0, 0, canvas.width, canvas.height);
+    var dataURL = canvas.toDataURL();
+    $.ajax({
+                type: "POST",
+                url: '/api/imageProcess',
+                data: {
+                    image: dataURL
+                },
+                success:  function (data) {
+                    console.log('sending');
+                },
+            });
+  });
+
+  // Attach the video stream to the video element and autoplay.
+  navigator.mediaDevices.getUserMedia(constraints)
+    .then((stream) => {
+      player.srcObject = stream;
+    });
+</script> -->
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function encodeImageFileAsURL(element) {
+        var file = element.files[0];
+        var reader = new FileReader();
+        reader.onloadend = function () {
+            // console.log(reader.result)
+            document.getElementById("preview").src = reader.result
+        }
+        reader.readAsDataURL(file);
+        
+
+       
+    }
+    function postData() {
+        var base64Img = document.getElementById("preview").src;
+        $.ajax({
+                type: "POST",
+                url: '/api/imageProcess',
+                data: {
+                    image: base64Img
+                },
+                success:  function (data) {
+                    console.log(data);
+                    document.getElementById("result").innerHTML = data
+                },
+            });
+    }
+   
+
+</script>
+{% endblock %}
